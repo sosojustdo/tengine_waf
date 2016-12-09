@@ -1,0 +1,7 @@
+\.(svn|htaccess|mysql_history|bash_history|git|DS_Store|idea)
+\.(bak|inc|old|mdb|sh|sql|backup|java|class)$
+(vhost|bbs|host|wwwroot|www|site|root|hytop|web).*\.(rar|xml|zip|tar\.gz|tar)
+(phpmyadmin|jmx-console|jmxinvokerservlet)
+java\.lang
+CVS/Entries$
+/(attachments|upimg|images|css|uploadfiles|html|uploads|templets|static|template|data|inc|forumdata|upload|includes|cache|avatar)/(\\w+).(php|jsp)
