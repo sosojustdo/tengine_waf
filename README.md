@@ -64,30 +64,41 @@ ip+uri 60/60  3600
 如上规则表示为：如果来自同一个ip同一页面的请求次数超过每分钟60次，则对其封禁1小时。
 
 示例二：
-假如我不需要对所有页面去做流控，只需要对特定页面做限制即可。比如说登录页面/logon.php 和 短信验证码页面 /sms/send.php，
+
+假如我不需要对所有页面去做流控，只需要对特定页面做限制即可。
+比如说登录页面/logon.php 和 短信验证码页面 /sms/send.php，
 防止暴力破解和短信炸弹，则配置可以为：
+
 ```
 ip+uri:logon.php   60/60  1800
 ip+uri:/sms/       10/60  3600
 ```
+
 首先允许配置多条规则，其次uri采取正则匹配的形式，/sms/ 则匹配了所有路径含有/sms/的页面。
 
 示例三：
-假如网站架构不一样，比如api结构的，gateway?api=logon&
-则token 可以为 ip+GetParam:api
+
+假如网站架构不一样，比如api结构的，gateway?api=logon&则token 可以为 ip+GetParam:api
 
 示例四：
-假如我想根据用户维护来做限制，禁止某些用户操作太频繁，首选要取得用户标识，比如GetParam:userid 或者CookieParam:sessionid，
-再根据实际情况去组合规则
+
+假如我想根据用户维护来做限制，禁止某些用户操作太频繁，首选要取得用户标识，
+
+比如GetParam:userid 或者CookieParam:sessionid，再根据实际情况去组合规则
 
 
 四、 Q & A
 
 4.1  为什么是centos, 为什么部署路径是/usr/local/
-因为我这是已经编译好的版本，反正我待过的几家互联网公司用的基本都是centos。也不用担心/usr目录不够大，因为日志目录可以改，和nginx一样 
+
+因为我这是已经编译好的版本，反正我待过的几家互联网公司用的基本都是centos。
+
+也不用担心/usr目录不够大，因为日志目录可以改，和nginx一样 
 
 4.2 有没有控制开关
+
 有开关，在conf/config.lua里, 有6个开关，分别对应各个配置文件功能是否开启。
+
 ```
 urlMatch="on"
 cookieMatch="on"
@@ -103,11 +114,16 @@ denycc="on"
 OnlyCheck="off"
 ```
 
-如果不想用这个防攻击模块了，也很简单，把conf/server/ 目录下站点的配置文件去掉 access_by_lua_file  这一行即可
+如果不想用这个防攻击模块了，也很简单，把conf/server/ 目录下
+
+站点的配置文件去掉 access_by_lua_file  这一行即可
 
 4.3  某个ip被封禁了为什么还有请求过来
+
 注意这里实行的是宽封禁，即封禁也需要满足token条件，假如规则为ip+uri:/abcd/ 命中被封禁了，
+
 则只封这个ip并带有abcd目录的访问，这个ip访问其他页面仍旧不封禁。所以默认策略下token参数越多，
+
 封禁力度就越小。 建议读下代码，想改也很容易。
 
 如发现bug，欢迎随时联系caobinbupt@foxmail.com
